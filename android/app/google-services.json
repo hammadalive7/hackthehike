@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "547485210386",
+    "project_id": "hackthehike-aubbs",
+    "storage_bucket": "hackthehike-aubbs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547485210386:android:5de5023664ebab554445cb",
+        "android_client_info": {
+          "package_name": "com.example.hackthehike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547485210386-n62is7kad945jdgjr3ebogkgc7h8lhpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-HQEs6uZ4bo4SrTTzxxYBQvWUGwrDHYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547485210386-n62is7kad945jdgjr3ebogkgc7h8lhpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
