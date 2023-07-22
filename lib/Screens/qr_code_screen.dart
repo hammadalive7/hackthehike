@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hackthehike/models/question_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:get/get.dart';
-
 import '../common/boxes.dart';
 import '../controllers/QRScreen_controller.dart';
 
 class QRCodeScanner extends StatefulWidget {
   const QRCodeScanner({Key? key}) : super(key: key);
-
   @override
   State<QRCodeScanner> createState() => _QRCodeScannerState();
 }
@@ -23,8 +20,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Barcode? result;
   String qrText = "";
   int score = 10;
+  //form key
+  final _formKey = GlobalKey<FormState>();
 
-  TimeOfDay time = TimeOfDay.now();
+  var timeSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+  var time = DateTime.now();
 
   final box = Boxes.getBoxes();
   final answerbox = Hive.box('answer');
@@ -143,15 +143,24 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                 Padding(
                   padding: const EdgeInsets.all(28.0),
                   child: Obx(() {
-                    return TextFormField(
-                      controller: ansController,
-                      enabled: qrController.questionBoxEnabled.value,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    return Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: ansController,
+                        enabled: qrController.questionBoxEnabled.value,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter answer";
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          labelText: "Enter Answer",
+                          hintText: "Enter Answer",
                         ),
-                        labelText: "Enter Answer",
-                        hintText: "Enter Answer",
                       ),
                     );
                   }),
@@ -161,30 +170,37 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                   height: height * 0.05,
                   width: width * 0.5,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // storing the ans with the question in score box
-                      // checking if the question is already answered then dont add it to the score box
-                      if (answerbox.containsKey(qrController.result!.code)) {
-                        Get.snackbar("Already Answered",
-                            "You have already answered this question",
-                            snackPosition: SnackPosition.BOTTOM,
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2));
-                      } else {
-                        // if the question is not answered then add it to the score box
-                        answerbox.put(
-                            qrController.result!.code, ansController.text + " --- " + time.format(context));
-                        Get.snackbar("Answer Submitted",
-                            "Your answer is submitted successfully",
-                            snackPosition: SnackPosition.BOTTOM,
-                            backgroundColor: Colors.green,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2));
+                    onPressed: (){
+
+                      //validate the form
+                      if (_formKey.currentState!.validate()) {
+                        // storing the ans with the question in score box
+                        // checking if the question is already answered then dont add it to the score box
+                        if (answerbox.containsKey(qrController.result!.code)) {
+                          Get.snackbar("Already Answered",
+                              "You have already answered this question",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2));
+                        } else {
+                          // if the question is not answered then add it to the score box
+                          answerbox.put(
+                              qrController.result!.code, ansController.text + "_" + time.toString());
+                          // print(answerbox.length);
+                          Get.snackbar("Answer Submitted",
+                              "Your answer is submitted successfully",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2));
+                        }
+
+                        //clear the textfield
+                        ansController.clear();
+
                       }
 
-                      //clear the textfield
-                      ansController.clear();
                     },
                     child: Text("Submit"),
                   ),
@@ -203,23 +219,25 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         if (qrController.result!.code == box.getAt(i)!.question.toString()) {
           question_matched = true;
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text("a: ${box.getAt(i)!.option1}"),
-              SizedBox(
-                height: 5,
-              ),
-              Text("b: ${box.getAt(i)!.option2}"),
-              SizedBox(
-                height: 5,
-              ),
-              Text("c: ${box.getAt(i)!.option3}"),
-              SizedBox(
-                height: 5,
-              ),
-              Text("d: ${box.getAt(i)!.option4}"),
-            ],
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("- ${box.getAt(i)!.option1}"),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("- ${box.getAt(i)!.option2}"),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("- ${box.getAt(i)!.option3}"),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("- ${box.getAt(i)!.option4}"),
+              ],
+            ),
           );
         } else {
           continue;

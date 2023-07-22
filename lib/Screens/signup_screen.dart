@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hackthehike/Admin/admin_screen.dart';
 import '../common/form_footer.dart';
 import '../common/transparent_appBar.dart';
 import '../controllers/signup_controller.dart';
@@ -23,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final _formkey = GlobalKey<FormState>();
 
     return Scaffold(
+
       appBar: transparentAppBar(context),
       body: SingleChildScrollView(
         child: Container(

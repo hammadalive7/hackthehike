@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hackthehike/Screens/login_screen.dart';
 import 'package:hive/hive.dart';
 import '../../Controllers/session_controller.dart';
+import '../Admin/admin_screen.dart';
 
 class ProfileFormWidget extends StatefulWidget {
   const ProfileFormWidget({
@@ -133,13 +134,13 @@ class _ProfileFormWidgetState extends State<ProfileFormWidget> {
                       enableInteractiveSelection: false,
                       focusNode: AlwaysDisabledFocusNode(),
                       validator: (value) {
-                      bool isUniversityNameValid=RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!);
-                        if (!isUniversityNameValid) {
-                          return 'Invalid Team ID.';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'This field is required';
                         }
-                        else{
-                          return null;
+                        if (value.trim().length < 2) {
+                          return 'Team ID must be valid';
                         }
+                        // Return null if the entered username is valid
                         // return null;
                       },
                       decoration: InputDecoration(
@@ -156,13 +157,13 @@ class _ProfileFormWidgetState extends State<ProfileFormWidget> {
                       enableInteractiveSelection: false,
                       focusNode: AlwaysDisabledFocusNode(),
                       validator: (value) {
-                      bool isUniversityNameValid=RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!);
-                        if (!isUniversityNameValid) {
-                          return 'Invalid University Name.';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'This field is required';
                         }
-                        else{
-                          return null;
+                        if (value.trim().length < 2) {
+                          return 'University Name must be valid';
                         }
+                        // Return null if the entered username is valid
                         // return null;
                       },
                       decoration: InputDecoration(
@@ -216,6 +217,7 @@ class _ProfileFormWidgetState extends State<ProfileFormWidget> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () {
+
                           FirebaseAuth.instance.signOut().whenComplete(() {
                             Get.offAll(() => const LoginScreen());
                           });
@@ -270,7 +272,9 @@ class _ProfileFormWidgetState extends State<ProfileFormWidget> {
 
 
                         child: Row(
+
                           mainAxisAlignment: MainAxisAlignment.center,
+
                           children: [
                             Text("Sync with Database".toUpperCase(),
                             style: const TextStyle(
@@ -279,6 +283,7 @@ class _ProfileFormWidgetState extends State<ProfileFormWidget> {
                             ),),
                             const SizedBox(width: 10),
                             const Icon(Icons.sync),
+
                           ],
                         ),
                       ),

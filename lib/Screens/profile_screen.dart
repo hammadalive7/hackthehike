@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:hackthehike/Screens/profile_screen_form.dart';
+
+import '../Admin/admin_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -13,6 +16,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        //position of button
+
+        onPressed: () {
+          Get.to(() => AdminPanel());
+        },
+        child: const Icon(Icons.admin_panel_settings_outlined),
+      ),
       // floatingActionButton:FloatingActionButton(
       //   foregroundColor: Colors.white,
       //   shape: const StadiumBorder(
